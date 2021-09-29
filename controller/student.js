@@ -18,11 +18,11 @@ async function getStudentById(req,res){
 async function createStudent(req,res){
     const {firstName,lastName,email} = req.body;
     const newStudent = new Student({firstName,lastName,email});
-    // try{
-    //     await newStudent.save();
-    // }catch(e){
-    //     return res.send(e);
-    // }//抓取错误的方法；
+    try{
+        await newStudent.save();
+    }catch(e){
+        return res.send(e);
+    }//抓取错误的方法；
     console.log('createStudent');
     return res.status(201).json(newStudent);
 }

@@ -3,7 +3,8 @@ const {Schema,model} = require('mongoose');
 const schema = new Schema({
     _id : {
         type: String,
-        uppercase: true
+        uppercase: true,
+        // alias: 'code'
     },
     name : {
         type: String,
@@ -12,7 +13,17 @@ const schema = new Schema({
     description : {
         type: String,
         default: 'This is a description.'
+    },
+    __v: {
+        type: Number,
+        select: false
     }
+},{
+    timestamps: true,
+    toJSON:{
+        virtuals: true
+    },
+    id: false
 });
 
 schema.virtual('code').get(function(){

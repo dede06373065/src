@@ -1,4 +1,5 @@
 const Course = require('../models/course');
+const Joi = require('joi');
 async function getAllCourses(req,res){
     //db.Course.find()在MongoDB中
     const courses = await Course.find().exec();//async await;exec()代表代码终止；
@@ -19,11 +20,21 @@ async function getCourseById(req,res){
     return res.json(course);
 }
 
-async function createCourseId(req,res){
-    const {code, name, description} = req.body;
+async function createCourse(req,res){
+    // const {code, name, description} = req.body;
+    const stringValidator = Joi.string().min(2).max(10).required();
+    const schema = Joi.object({
+        name: stringValidator,
+        code: Joi.string().regex(/^[A-Za-z0-9]+$/).required(),
+        description: Joi.string().min(10)
+    })
+    const {code, name, description} = await schema.validateAsync(req.body,{
+        allowUnknown: true,//允许接收不存在的数据
+        stripUnknown: true//虽然接收到不存在的数据但是会删掉
+    })
     const newcourse = new Course({_id:code, name, description});
     await newcourse.save();
-    console.log("createCourseId");
+    console.log("createCourse");
     return res.status(201).json(newcourse);
 }
 
@@ -52,7 +63,7 @@ async function updateCourseById(req,res){
 module.exports = {
     getAllCourses,
     getCourseById,
-    createCourseId,
+    createCourse,
     deleteCourseById,
     updateCourseById
 };

@@ -56,9 +56,9 @@ async function addStudentToCourse(req,res){
         return res.sendStatus(404);
     }
     student.courses.addToSet(course._id);
-    // course.students.addToSet(student._id);
+    course.students.addToSet(student._id);
     await student.save();
-    // await course.save();
+    await course.save();
     return res.json(student);
 }
 

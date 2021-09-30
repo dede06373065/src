@@ -1,3 +1,4 @@
+const { ObjectId } = require('bson');
 const {Schema,model} = require('mongoose');
 
 const schema = new Schema({
@@ -14,6 +15,12 @@ const schema = new Schema({
         type: String,
         default: 'This is a description.'
     },
+    students: [
+        {
+            type: Schema.Types.ObjectId, 
+            ref: 'Student'
+        }
+    ],
     __v: {
         type: Number,
         select: false

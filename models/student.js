@@ -16,20 +16,16 @@ const schema = new Schema({
     email: {
         type: String,
         require: true,
-        validate:{
-            validator: ()=>{
-                // const validation = Joi.string().email.validate(email);
-                // const {error} = validation;
-                // if(error){
-                //     return false;
-                // } else {
-                //     return true
-                // };
-                return !Joi.string.email.validate(email).error;
-            },
-            msg: 'Invalid email format.'
-        }
-    }
+        // validate: {
+        //     validator: (email)=>{
+        //         return !Joi.string().email().validate(email);
+        //     },
+        //     msg: 'Invalid email format.'
+        // }
+    },
+    courses: [
+        {type: String, ref:'Course'}
+    ],
 },{
     timestamps: true,
     id: true

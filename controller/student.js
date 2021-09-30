@@ -1,4 +1,5 @@
 const Student = require('../models/student');
+const Course = require('../models/course');
 
 async function getAllStudents(req,res){
     const students = await Student.find().exec();
@@ -8,7 +9,7 @@ async function getAllStudents(req,res){
 
 async function getStudentById(req,res){
     const {id} = req.params;
-    const student = await Student.findById(id);
+    const student = await Student.findById(id).exec();
     if(!student){
         return res.sendStatus(404);
     }
@@ -46,10 +47,38 @@ async function updateStudentById(req,res){
     return res.sendStatus(201).json(targetStudent);
 }
 
+async function addStudentToCourse(req,res){
+    const {id,code} = req.params;
+    const student = await Student.findById(id).exec();
+    const course = await Course.findById(code).exec();
+    console.log(student);
+    if(!student || !course){
+        return res.sendStatus(404);
+    }
+    student.courses.addToSet(course._id);
+    // course.students.addToSet(student._id);
+    await student.save();
+    // await course.save();
+    return res.json(student);
+}
+
+async function removeStudentToCourse(req,res){
+    // const {id, code} = req.params;
+    // const student = await Student.findById(id).exec();
+    // const course = await Course.findById(code).exec();
+    // if(!student ||!course){
+    //     return res.sendStatus(404);
+    // }
+    // return res.json(student);
+
+}
+
 module.exports = {
     getAllStudents,
     getStudentById,
     createStudent,
     deleteStudentById,
-    updateStudentById
+    updateStudentById,
+    addStudentToCourse,
+    removeStudentToCourse
 }
